@@ -1,0 +1,5 @@
+# Ignore everything in this directory these files
+*
+!queries.txt
+!queries.txt.bnids
+!.gitignore
