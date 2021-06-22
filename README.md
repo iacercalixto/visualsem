@@ -29,7 +29,7 @@ In addition to the dataset files, you can also download pre-extracted features (
 
 After you download the data (`nodes.v2.json`, `tuples.v2.json`, `glosses.v2.tgz`, `images.tgz`, `glosses.v2.sentencebert.h5`, `images_features_splits.tgz`, `visualsem-image-features.valid.CLIP-RN50x4.npz`, `visualsem-image-features.test.CLIP-RN50x4.npz`), make sure all these files are available in `./dataset`.
 
-    cd ./dataset
+    mkdir ./dataset && cd ./dataset
     tar zxvf glosses.v2.tgz
     tar zxvf images_features_splits.tgz
     tar xvf images.tar
