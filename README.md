@@ -31,8 +31,8 @@ After you download the data (`nodes.v2.json`, `tuples.v2.json`, `glosses.v2.tgz`
 
     cd ./dataset
     tar zxvf glosses.v2.tgz
-    tar zxvf images.v2.tgz
     tar zxvf images_features_splits.tgz
+    tar xvf images.tar
 
 
 ## Requirements
