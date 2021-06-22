@@ -10,7 +10,6 @@ import numpy
 import tqdm
 from itertools import zip_longest
 from utils import grouper, load_sentences, load_bnids, load_visualsem_bnids
-#from utils import test_queries
 
 
 def retrieve_nodes_given_sentences(out_fname, batch_size, all_input_sentences, glosses_bnids, glosses_feats, topk):
@@ -27,7 +26,8 @@ def retrieve_nodes_given_sentences(out_fname, batch_size, all_input_sentences, g
 
     n_examples = len(all_input_sentences)
     print("Number of input examples to extract BNIDs for: ", n_examples)
-    model = SentenceTransformer('distiluse-base-multilingual-cased')
+    model_name = "paraphrase-multilingual-mpnet-base-v2"
+    model = SentenceTransformer(model_name)
 
     with open(out_fname, 'w', encoding='utf8') as fh_out:
         ranks_predicted = []
@@ -40,7 +40,8 @@ def retrieve_nodes_given_sentences(out_fname, batch_size, all_input_sentences, g
                     queries.append( all_input_sentences[i] )
 
             queries_embs = model.encode(queries, convert_to_tensor=True)
-            queries_embs = queries_embs.cuda()
+            if torch.cuda.is_available():
+                queries_embs = queries_embs.cuda()
             scores = util.pytorch_cos_sim(queries_embs, glosses_feats)
             scores = scores.cpu().numpy()
 
@@ -72,10 +73,11 @@ def encode_query(out_fname, batch_size, all_sentences):
         all_sentences(list[str]):           Sentences to be used for retrieval.
     """
     n_lines = len(all_sentences)
-    model = SentenceTransformer('distiluse-base-multilingual-cased')
-    shape_features = (n_lines, 512)
+    model_name = "paraphrase-multilingual-mpnet-base-v2"
+    model = SentenceTransformer(model_name)
+    shape_features = (n_lines, 768)
     with h5py.File(out_fname, 'w') as fh_out:
-        fh_out.create_dataset("features", shape_features, dtype='float32', chunks=(1,512), maxshape=(None, 512), compression="gzip")
+        fh_out.create_dataset("features", shape_features, dtype='float32', chunks=(1,768), maxshape=(None, 768), compression="gzip")
 
         for from_idx in tqdm.trange(0,n_lines,batch_size):
             to_idx = from_idx+batch_size if from_idx+batch_size <= n_lines else n_lines
@@ -86,7 +88,6 @@ def encode_query(out_fname, batch_size, all_sentences):
 
 
 if __name__=="__main__":
-    #visualsem_path             = "/misc/vlgscratch5/ChoGroup/icalixto/visualsem_krakatoa"
     visualsem_path             = os.path.dirname(os.path.realpath(__file__))
     visualsem_nodes_path       = "%s/dataset/nodes.json"%visualsem_path
     visualsem_images_path      = "%s/dataset/images/"%visualsem_path
@@ -109,6 +110,10 @@ if __name__=="__main__":
             help="""HDF5 file containing glosses index computed with Sentence BERT (computed with `extract_glosses_visualsem.py`).""")
     p.add_argument('--glosses_bnids_path', type=str, default=glosses_bnids_path,
             help="""Text file containing glosses BabelNet ids, one per line (computed with `extract_glosses_visualsem.py`).""")
+    p.add_argument('--input_valid', action='store_true',
+            help="""Perform retrieval for the glosses in the validation set. (See paper for reference)""")
+    p.add_argument('--input_test', action='store_true',
+            help="""Perform retrieval for the glosses in the test set. (See paper for reference)""")
     args = p.parse_args()
 
     # load all nodes in VisualSem
@@ -117,9 +122,19 @@ if __name__=="__main__":
     gloss_bnids = numpy.array(gloss_bnids, dtype='object')
 
     with h5py.File(args.glosses_sentence_bert_path, 'r') as fh_glosses:
-        glosses_feats = fh_glosses["features"][:]
-        glosses_feats = torch.tensor(glosses_feats)
-        glosses_feats = glosses_feats.cuda()
+        glosses_feats  = fh_glosses["features"][:]
+        glosses_feats  = torch.tensor(glosses_feats)
+        if torch.cuda.is_available():
+            glosses_feats = glosses_feats.cuda()
+
+        # load train/valid/test gloss splits
+        glosses_splits = fh_glosses["split_idxs"][:]
+        train_idxs = (glosses_splits==0).nonzero()[0]
+        valid_idxs = (glosses_splits==1).nonzero()[0]
+        test_idxs  = (glosses_splits==2).nonzero()[0]
+
+        # load gloss language splits
+        language_splits = fh_glosses["language_idxs"][:]
 
         for input_file in args.input_files:
             print("Processing input file: %s ..."%input_file)
