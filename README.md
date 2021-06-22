@@ -22,17 +22,18 @@ VisualSem is publicly and fully available for researchers and is released under 
 - [images.tar](https://surfdrive.surf.nl/files/index.php/s/Flm7d6viZ624rAG) (31GB): All 1.5M images.
 
 In addition to the dataset files, you can also download pre-extracted features (used in retrieval experiments).
-- [glosses.v2.sentencebert.h5](https://surfdrive.surf.nl/files/index.php/s/7PDiEKQapk4dhlW) (9.8GB): Sentence BERT features extracted for all glosses.
+- [glosses.sentencebert.v2.tgz](https://surfdrive.surf.nl/files/index.php/s/7PDiEKQapk4dhlW) (9.8GB): Sentence BERT features extracted for all glosses.
 - [images_features_splits.tgz](https://surfdrive.surf.nl/files/index.php/s/nuzVxSfhSH91MSv) (82MB): Image training/validation/test splits.
 - [visualsem-image-features.valid.CLIP-RN50x4.npz](https://surfdrive.surf.nl/files/index.php/s/SvWgg9RZNEaXHls) (31MB) and [visualsem-image-features.test.CLIP-RN50x4.npz](https://surfdrive.surf.nl/files/index.php/s/pRsiPCuDLpUxmmZ) (31MB): CLIP features for all images in validation/test splits.
 
 
 After you download the data (`nodes.v2.json`, `tuples.v2.json`, `glosses.v2.tgz`, `images.tgz`, `glosses.v2.sentencebert.h5`, `images_features_splits.tgz`, `visualsem-image-features.valid.CLIP-RN50x4.npz`, `visualsem-image-features.test.CLIP-RN50x4.npz`), make sure all these files are available in `./dataset`.
 
-    cd ./dataset
+    mkdir ./dataset && cd ./dataset
     tar zxvf glosses.v2.tgz
-    tar zxvf images.v2.tgz
+    tar zxvf glosses.sentencebert.v2.tgz
     tar zxvf images_features_splits.tgz
+    tar xvf images.tar
 
 
 ## Requirements
