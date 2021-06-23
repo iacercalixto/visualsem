@@ -39,7 +39,7 @@ def load_visualsem_english_glosses(split_idx, max_splits):
     """
     en_glosses_fname = os.path.join(path_to_vs, 'dataset', "gloss_files/glosses.en.txt")
     en_glosses_nodes_fname = os.path.join(path_to_vs, 'dataset', "gloss_files/glosses.en.txt.bnids")
-    nodes_fname = os.path.join(path_to_vs, 'dataset', "nodes.json")
+    nodes_fname = os.path.join(path_to_vs, 'dataset', "nodes.v2.json")
 
     print("Loading glosses...")
     # load nodes JSON (we only load the nodes JSON to get the overall number of nodes and split examples per GPU)
@@ -330,7 +330,7 @@ if __name__=="__main__":
     #        the validation and test sets as queries.""")
     p.add_argument('--one_gloss_per_node', action='store_true',
             help="""When running retrieval, wether to represent each node in the index with a single english gloss,
-            or with all iavailable glosses for the node.""")
+            or with all available glosses for the node.""")
     p.add_argument('--split_name', type=str, choices=['valid', 'test'], nargs="+", default=['valid', 'test'],
             help="""Image splits to perform retrieval for.""")
     args = p.parse_args()
