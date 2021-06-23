@@ -4,3 +4,6 @@ h5py
 tqdm
 nltk
 sentence_transformers
+ftfy
+regex
+clip
