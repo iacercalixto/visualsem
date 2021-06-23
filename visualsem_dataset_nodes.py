@@ -71,9 +71,9 @@ class VisualSemNodesDataset(torch.utils.data.Dataset):
 
 if __name__=="__main__":
     dir_path    = os.path.dirname(os.path.realpath(__file__))
-    nodes_json   = os.path.join(dir_path, "dataset", "nodes.json")
+    nodes_json   = os.path.join(dir_path, "dataset", "nodes.v2.json")
     glosses_json = os.path.join(dir_path, "dataset", "gloss_files", "nodes.glosses.json")
-    tuples_json  = os.path.join(dir_path, "dataset", "tuples.json")
+    tuples_json  = os.path.join(dir_path, "dataset", "tuples.v2.json")
     # testing node dataset
     print("Testing node dataset...")
     vs = VisualSemNodesDataset(nodes_json, glosses_json, tuples_json)

@@ -22,12 +22,12 @@ VisualSem is publicly and fully available for researchers and is released under 
 - [images.tar](https://surfdrive.surf.nl/files/index.php/s/Flm7d6viZ624rAG) (31GB): All 1.5M images.
 
 In addition to the dataset files, you can also download pre-extracted features (used in retrieval experiments).
-- [glosses.sentencebert.v2.tgz](https://surfdrive.surf.nl/files/index.php/s/7PDiEKQapk4dhlW) (9.8GB): Sentence BERT features extracted for all glosses.
+- [glosses.sentencebert.v2.tgz](https://surfdrive.surf.nl/files/index.php/s/7PDiEKQapk4dhlW) (9.8GB): Sentence BERT features extracted for all glosses as well as gloss training/validation/test splits.
 - [images_features_splits.tgz](https://surfdrive.surf.nl/files/index.php/s/nuzVxSfhSH91MSv) (82MB): Image training/validation/test splits.
 - [visualsem-image-features.valid.CLIP-RN50x4.npz](https://surfdrive.surf.nl/files/index.php/s/SvWgg9RZNEaXHls) (31MB) and [visualsem-image-features.test.CLIP-RN50x4.npz](https://surfdrive.surf.nl/files/index.php/s/pRsiPCuDLpUxmmZ) (31MB): CLIP features for all images in validation/test splits.
 
 
-After you download the data (`nodes.v2.json`, `tuples.v2.json`, `glosses.v2.tgz`, `images.tgz`, `glosses.v2.sentencebert.h5`, `images_features_splits.tgz`, `visualsem-image-features.valid.CLIP-RN50x4.npz`, `visualsem-image-features.test.CLIP-RN50x4.npz`), make sure all these files are available in `./dataset`.
+After you download the data (`nodes.v2.json`, `tuples.v2.json`, `glosses.v2.tgz`, `images.tar`, `glosses.sentencebert.v2.tgz`, `images_features_splits.tgz`, `visualsem-image-features.valid.CLIP-RN50x4.npz`, `visualsem-image-features.test.CLIP-RN50x4.npz`), make sure all these files are available in `./dataset`. Untar the (compressed) tarballs as indicated below.
 
     mkdir ./dataset && cd ./dataset
     tar zxvf glosses.v2.tgz
@@ -49,7 +49,7 @@ We release a multi-modal retrieval framework that allows one to retrieve nodes f
 
 ### Sentence retrieval
 
-We use [Sentence BERT](https://github.com/UKPLab/sentence-transformers) (SBERT) as the multilingual encoder in our sentence retrieval model. We encode all glosses in VisualSem using SBERT, and also the query. Retrieval is implemented as a simple k-NN algorithm that computes a dot-product between the query vector representing the input sentence and the nodes' gloss matrix. We directly retrieve the top-k unique nodes associated to the most relevant glosses as the results.
+We use [Sentence BERT](https://github.com/UKPLab/sentence-transformers) (SBERT) as the multilingual encoder in our sentence retrieval model. We encode all glosses in VisualSem using SBERT, and also the query. Retrieval is implemented with k-NN where we compute the dot-product between the query vector representing the input sentence and the nodes' gloss matrix. We directly retrieve the top-k unique nodes associated to the most relevant glosses as the results.
 
 #### Reproduce paper results
 
@@ -57,9 +57,11 @@ To reproduce the sentence retrieval results in our paper (metric scores obtained
 
     python retrieval_gloss_paper.py
 
+If your VisualSem files are in non-standard directories, run `python retrieval_gloss_paper.py --help` to see the arguments to use to provide their locations.
+
 #### Retrieve nodes for an arbitrary sentence
 
-Assuming the file `/path/to/queries.txt` contains one English sentence per line consisting of multiple queries,  by running `retrieval_gloss.py` as below you will generate `/path/to/queries.txt.bnids` with the retrieved nodes. The generated file contains the retrieved nodes (i.e. BNid) followed by their score (i.e. cosine similarity with the query). You can retrieve nodes from VisualSem for each sentential query by running:
+Assuming the file `/path/to/queries.txt` contains one (detokenized) English sentence per line consisting of multiple queries,  by running `retrieval_gloss.py` as below you will generate `/path/to/queries.txt.bnids` with the retrieved nodes. The generated file contains the retrieved nodes (i.e. BNid) followed by their score (i.e. cosine similarity with the query). You can retrieve nodes from VisualSem for each query by running:
 
     python retrieval_gloss.py --input_file /path/to/queries.txt
 
@@ -77,32 +79,32 @@ If you want to retrieve using glosses in other languages, you can do as below (e
 If you want to retrieve using glosses in multiple languages, you can first combine glosses together into a single index and retrieve as below.
 
     # use flag --help to see what each option entails.
-    python combine_sentencebert_glosses.py --strategy {all, top8, all_but_swedish_and_farsi}
+    python combine_sentencebert_glosses.py --strategy {all, top8}
 
     python retrieval_gloss.py
         --input_files example_data/queries.txt
         --glosses_sentence_bert_path dataset/gloss_files/glosses.combined-top8.h5
         --glosses_bnids_path dataset/gloss_files/glosses.combined-top8.bnids
 
-The above command will build an index using glosses for the 8 best performing languages (according to experiments in our paper) instead of the 14 languages supported. This gloss matrix is then ranked according to gloss similarity to each sentential query in `queries.txt`, and the associated nodes are retrieved. Among other options, you can set the number of nodes to retrieve for each sentence (`--topk` parameter).
+The above command will build an index using glosses for the 8 best performing languages (according to experiments in our paper) instead of all the 14 supported languages. This gloss matrix is then ranked according to gloss similarity to each query in `queries.txt`, and the associated nodes are retrieved. Among other options, you can set the number of nodes to retrieve for each sentence (`--topk` parameter).
 
 ### Image retrieval
 
-We use [Open AI's CLIP](https://github.com/openai/CLIP) as our image retrieval model. CLIP has a bi-encoder architecture with one text and one image encoder. We encode all English glosses in VisualSem using CLIP's text encoder, and we encode the image we are using to query the KG with CLIP's image encoder. Retrieval is again implemented as k-NN where we compute a dot-product between the query vector representing the input image and the nodes' gloss matrix. We directly retrieve the top-k unique nodes associated to the most relevant glosses as the results.
+We use [Open AI's CLIP](https://github.com/openai/CLIP) as our image retrieval model. CLIP has a bi-encoder architecture with one text and one image encoder. We encode all English glosses in VisualSem using CLIP's text encoder, and we encode the image we are using to query the KG with CLIP's image encoder. Retrieval is again implemented as k-NN where we compute the dot-product between the query vector representing the input image and the nodes' gloss matrix. We directly retrieve the top-k unique nodes associated to the highest scoring glosses as the results.
 
 #### Reproduce paper results
 
-First, run the script below to extract features for all images in the validation/test sets with CLIP.
+First, if you have not downloaded the validation and test image features extracted with CLIP ([visualsem-image-features.valid.CLIP-RN50x4.npz](https://surfdrive.surf.nl/files/index.php/s/SvWgg9RZNEaXHls) and [visualsem-image-features.test.CLIP-RN50x4.npz](https://surfdrive.surf.nl/files/index.php/s/pRsiPCuDLpUxmmZ)), run the script below.
 
     python encode_images_with_CLIP.py
 
-To reproduce the image retrieval results in our paper (metric scores obtained on validation and test image splits), run the command below.
+To reproduce the image retrieval results in our paper (metric scores obtained on validation and test image splits), run the script below.
 
     python retrieval_image_paper.py
 
 #### Retrieve nodes for an arbitrary image
 
-Assuming the file `/path/to/queries.txt` contains the full path to an image file per line,  by running `retrieval_image.py` as below you will generate `/path/to/queries.txt.bnids` with the retrieved nodes. The generated file contains the retrieved nodes (i.e. BNid) followed by their score (i.e. cosine similarity with the query image). You can retrieve nodes from VisualSem for each image query by running:
+Assuming the file `/path/to/queries.txt` contains the full path to one image file per line,  by running `retrieval_image.py` as below you will generate `/path/to/queries.txt.bnids` with the retrieved nodes. The generated file contains the retrieved nodes (i.e. BNid) followed by their score (i.e. cosine similarity with the query image). You can retrieve nodes from VisualSem for each image query by running:
 
     python retrieval_image.py --input_file /path/to/queries.txt
 

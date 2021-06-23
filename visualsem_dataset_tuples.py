@@ -41,7 +41,7 @@ class VisualSemTuplesDataset(torch.utils.data.Dataset):
 
 if __name__=="__main__":
     dir_path    = os.path.dirname(os.path.realpath(__file__))
-    tuples_json  = os.path.join(dir_path, "dataset", "tuples.json")
+    tuples_json  = os.path.join(dir_path, "dataset", "tuples.v2.json")
     # testing tuples dataset
     print("Testing tuple dataset...")
     vs = VisualSemTuplesDataset(tuples_json)

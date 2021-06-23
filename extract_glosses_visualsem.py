@@ -182,9 +182,9 @@ def write_glosses_per_language(dict_available_languages, glosses_dict, path_to_v
 
 if __name__=="__main__":
     # Path to VisualSem
-    visualsem_path = "/misc/vlgscratch5/ChoGroup/icalixto/visualsem_krakatoa"
+    visualsem_path = os.path.dirname(os.path.realpath(__file__))
     # VisualSem nodes file
-    path_to_visualsem_json = "%s/dataset/nodes.json"%visualsem_path
+    path_to_visualsem_json = "%s/dataset/nodes.v2.json"%visualsem_path
     # VisualSem glosses file (to be created)
     path_to_glosses_json = "%s/dataset/gloss_files/nodes.glosses.json"%visualsem_path
     # VisualSem gloss languages file (to be created)
