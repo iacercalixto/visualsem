@@ -138,19 +138,6 @@ For examples on how to include VisualSem in your code base, please run:
     # iterate each tuple in the dataset (around 1.5M)
     python visualsem_dataset_tuples.py
 
-## Citing our work
-
-If you use VisualSem, please consider citing our paper.
-
-    @article{alberts2020visualsem,
-      title={VisualSem: a high-quality knowledge graph for vision and language},
-      author={Alberts, Houda and Huang, Teresa and Deshpande, Yash and Liu, Yibo and Cho, Kyunghyun and Vania, Clara and Calixto, Iacer},
-      journal={arXiv preprint arXiv:2008.09150},
-      year={2020}
-    }
-
-If you use BabelNet, please refer to [BabelNet publications](https://babelnet.org/papers) on how to properly credit their work.
-
 
 ## License
 
