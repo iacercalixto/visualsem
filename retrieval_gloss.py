@@ -89,7 +89,7 @@ def encode_query(out_fname, batch_size, all_sentences):
 
 if __name__=="__main__":
     visualsem_path             = os.path.dirname(os.path.realpath(__file__))
-    visualsem_nodes_path       = "%s/dataset/nodes.json"%visualsem_path
+    visualsem_nodes_path       = "%s/dataset/nodes.v2.json"%visualsem_path
     visualsem_images_path      = "%s/dataset/images/"%visualsem_path
     glosses_sentence_bert_path = "%s/dataset/gloss_files/glosses.en.txt.sentencebert.h5"%visualsem_path
     glosses_bnids_path         = "%s/dataset/gloss_files/glosses.en.txt.bnids"%visualsem_path

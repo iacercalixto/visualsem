@@ -120,7 +120,7 @@ def retrieve_nodes_given_sentences(out_fname, batch_size, mapping_bnids_idxs_to_
 
 if __name__=="__main__":
     visualsem_path             = os.path.dirname(os.path.realpath(__file__))
-    visualsem_nodes_path       = "%s/dataset/nodes.json"%visualsem_path
+    visualsem_nodes_path       = "%s/dataset/nodes.v2.json"%visualsem_path
     visualsem_images_path      = "%s/dataset/images/"%visualsem_path
     glosses_sentence_bert_path = "%s/dataset/gloss_files/glosses.en.txt.sentencebert.h5"%visualsem_path
     glosses_bnids_path         = "%s/dataset/gloss_files/glosses.en.txt.bnids"%visualsem_path
@@ -203,7 +203,7 @@ if __name__=="__main__":
 
             # file names, input/output
             input_file = "valid."+ args.glosses_bnids_path.rsplit("/", 1)[-1].replace(".h5", "")
-            out_fname = input_file+".bnids.retrieved_nodes"
+            out_fname = os.path.join(args.visualsem_path, 'dataset', input_file+".bnids.retrieved_nodes")
 
             retrieve_nodes_given_sentences(out_fname, args.batch_size, mapping_bnids_idxs_to_gloss_idxs,
                     train_feats, valid_bnids_idxs_for_each_gloss, valid_feats, args.topk,
