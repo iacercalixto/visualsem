@@ -19,7 +19,7 @@ VisualSem is publicly and fully available for researchers and is released under 
 - [nodes.v2.json](https://surfdrive.surf.nl/files/index.php/s/06AFB1LsJV9yt5N) (83MB): All nodes in VisualSem.
 - [tuples.v2.json](https://surfdrive.surf.nl/files/index.php/s/P37QRCWDJVRqcWG) (83MB): All tuples in VisualSem.
 - [glosses.v2.tgz](https://surfdrive.surf.nl/files/index.php/s/gQLULr5ElOEiafx) (125MB): All 1.5M glosses in 14 different languages.
-- [images.tar](https://surfdrive.surf.nl/files/index.php/s/Flm7d6viZ624rAG) (31GB): All 1.5M images.
+- [images.tgz](https://surfdrive.surf.nl/files/index.php/s/KXmZTm4hNaXoYfO) (31GB): All 1.5M images.
 
 In addition to the dataset files, you can also download pre-extracted features (used in retrieval experiments).
 - [glosses.sentencebert.v2.tgz](https://surfdrive.surf.nl/files/index.php/s/7PDiEKQapk4dhlW) (9.8GB): Sentence BERT features extracted for all glosses as well as gloss training/validation/test splits.
