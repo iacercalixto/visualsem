@@ -27,7 +27,10 @@ In addition to the dataset files, you can also download pre-extracted features (
 - [visualsem-image-features.valid.CLIP-RN50x4.npz](https://surfdrive.surf.nl/files/index.php/s/SvWgg9RZNEaXHls) (31MB) and [visualsem-image-features.test.CLIP-RN50x4.npz](https://surfdrive.surf.nl/files/index.php/s/pRsiPCuDLpUxmmZ) (31MB): CLIP features for all images in validation/test splits.
 
 
-After you download the data (`nodes.v2.json`, `tuples.v2.json`, `glosses.v2.tgz`, `images.tar`, `glosses.sentencebert.v2.tgz`, `images_features_splits.tgz`, `visualsem-image-features.valid.CLIP-RN50x4.npz`, `visualsem-image-features.test.CLIP-RN50x4.npz`), make sure all these files are available in `./dataset`. Untar the (compressed) tarballs as indicated below.
+After you download the data (`nodes.v2.json`, `tuples.v2.json`, `glosses.v2.tgz`, `images.tar`, `glosses.sentencebert.v2.tgz`, `images_features_splits.tgz`, `visualsem-image-features.valid.CLIP-RN50x4.npz`, `visualsem-image-features.test.CLIP-RN50x4.npz`), make sure all these files are available in `./dataset`. These files are password protected, please send us an email (calixto[dot]iacer[at]gmail[dot]com) requesting the password using your **institutional email address (e.g. university email)** and we will provide you with the password asap.
+
+
+Untar the (compressed) tarballs as indicated below.
 
     mkdir ./dataset && cd ./dataset
     tar zxvf glosses.v2.tgz
